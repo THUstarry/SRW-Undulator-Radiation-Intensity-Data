@@ -1,0 +1,152 @@
+{
+  "title": "SRW undulator-radiation intensity dataset for surrogate modeling",
+  "schema_version": "1.0",
+  "created_utc": "2026-07-30T10:57:44+00:00",
+  "data_origin": {
+    "simulation_software": "Synchrotron Radiation Workshop (SRW)",
+    "generator_script": "nuclear_main.py",
+    "common_grid_script": "surrogate_pipeline_common.py",
+    "data_type": "multi-electron propagated Stokes S0 intensity"
+  },
+  "sample_design": {
+    "n_samples": 1089,
+    "grid_design": "33 x 33 Cartesian parameter scan",
+    "By_T": {
+      "minimum": 0.6,
+      "maximum": 0.9,
+      "n_values": 33
+    },
+    "detuning_relative": {
+      "minimum": -0.01,
+      "maximum": 0.01,
+      "n_values": 33,
+      "definition": "(E_photon - E_resonance) / E_resonance"
+    }
+  },
+  "physical_configuration": {
+    "undulator_type": "planar",
+    "undulator_period_m": 0.033,
+    "undulator_periods": 70,
+    "electron_beam_energy_GeV": 6.0,
+    "average_current_A": 0.1,
+    "electron_beam_rms": {
+      "sigma_x_m": 2e-05,
+      "sigma_y_m": 2e-06,
+      "sigma_xp_rad": 3e-06,
+      "sigma_yp_rad": 5e-07,
+      "relative_energy_spread": 0.0011
+    },
+    "macro_electrons_per_sample": 10000,
+    "beamline": "ideal thin lens at the initial 20 m wavefront, followed by 10 m free-space drift",
+    "lens_focal_length_definition": "fx = fy = 10 * (E_photon / 2000 eV)^2 m"
+  },
+  "common_physical_grid": {
+    "x_um": [
+      -650.0,
+      650.0
+    ],
+    "y_um": [
+      -650.0,
+      650.0
+    ],
+    "shape": [
+      160,
+      160
+    ],
+    "axis_order": [
+      "sample",
+      "y",
+      "x"
+    ],
+    "resampling_method": "linear interpolation"
+  },
+  "arrays": {
+    "sample_id": {
+      "shape": [
+        1089
+      ],
+      "dtype": "int64"
+    },
+    "parameters": {
+      "shape": [
+        1089,
+        2
+      ],
+      "dtype": "float64",
+      "column_order": [
+        "By_T",
+        "detuning_relative"
+      ]
+    },
+    "By_T": {
+      "shape": [
+        1089
+      ],
+      "dtype": "float64",
+      "unit": "T"
+    },
+    "detuning_relative": {
+      "shape": [
+        1089
+      ],
+      "dtype": "float64",
+      "unit": "dimensionless"
+    },
+    "intensity": {
+      "shape": [
+        1089,
+        160,
+        160
+      ],
+      "dtype": "float32",
+      "quantity": "propagated SRW Stokes S0",
+      "unit": "ph s^-1 (0.1% bw)^-1 mm^-2"
+    },
+    "x_um": {
+      "shape": [
+        160
+      ],
+      "dtype": "float64",
+      "unit": "um"
+    },
+    "y_um": {
+      "shape": [
+        160
+      ],
+      "dtype": "float64",
+      "unit": "um"
+    },
+    "n_macro_electrons": {
+      "shape": [
+        1089
+      ],
+      "dtype": "int64"
+    }
+  },
+  "fixed_split": {
+    "in_domain_bounds": {
+      "By_T": [
+        0.65,
+        0.85
+      ],
+      "detuning_relative": [
+        -0.008,
+        0.008
+      ]
+    },
+    "rule": "Samples outside either in-domain bound are ExtrapTest. In-domain samples are shuffled once and split 70%/15%/15%.",
+    "split_seed": 0,
+    "counts": {
+      "train_indices": 367,
+      "validation_indices": 78,
+      "interp_test_indices": 80,
+      "extrap_test_indices": 564
+    },
+    "shared_across_all_models_log_states_and_training_seeds": true
+  },
+  "scope_notes": [
+    "Only physical common-grid intensity is released.",
+    "Log transforms, training-only normalization, and POD bases are not stored.",
+    "The dataset represents a simplified beamline and is not a full SSMB beamline model."
+  ]
+}
